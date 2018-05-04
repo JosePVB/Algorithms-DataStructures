@@ -98,6 +98,38 @@ def balanced_parentheses(string, open_chars='({[<'):
     return stack.is_empty()
 
 
+def base_converter(base_ten_int, base=2):
+    """
+    Converts the integer to the number system with a user defined base.
+
+    Assumes that integer is greater than 0.
+
+    Variables
+    ---------
+    base_ten_int, int
+        Integer to convert; assumed to be greater than 0.
+    base, int; default = 2
+        Number system base, between 2 and 16, with which the integer will be
+        converted.
+    """
+    if base_ten_int <= 0:
+        raise ValueError("Need to provide aN integer greater than 0.")
+
+    if not 2 <= base <= 16:
+        raise ValueError("Base must be between 2 and 16.")
+
+    digits = "0123456789ABCDEF"
+    stack = Stack()
+
+    while base_ten_int > 0:
+        # Add remainder to the stack.
+        stack.push(base_ten_int % base)
+        base_ten_int = base_ten_int // base
+
+    return ''.join(digits[stack.pop()] for _ in range(stack.size()))
+
+
 if __name__ == "__main__":
     s = Stack()
     print(balanced_parentheses('(())'))
+    print(base_converter(233453))
