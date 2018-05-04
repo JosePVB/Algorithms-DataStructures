@@ -53,5 +53,51 @@ class Stack():
         return len(self.items)
 
 
+def balanced_parentheses(string, open_chars='({[<'):
+    """
+    Returns True if string contains a balanced number of parentheses; the
+    number of open parentheses equals the number of close parentheses.
+
+    Returns False if the number of parentheses are not equal.
+
+    The algorithm reads the string from left to right and adds an open
+    character to the Stack on every open character. The most recent entry into
+    the Stack is removed on every corresponding closed character.
+
+    Variables
+    ---------
+    string, str
+        String containing any one of the character that need to be balanced.
+    open_chars, iterable; default = '({[<'
+        Iterable containing the characters that need to be balanced, such as
+        '(', '{', '[', and/or '<'.
+    """
+    stack = Stack()
+
+    # Construct closing characters.
+    def f(x): return ')' if x == '(' else chr(ord(x)+2)
+    close_chars = ''.join(map(f, open_chars))
+
+    # Parse string left to right
+    for char in string:
+        # Check for open character
+        if char in open_chars:
+            stack.push(char)
+        elif char in close_chars:
+            try:
+                if (close_chars.index(char)
+                        == open_chars.index(stack.peek())):
+                    stack.pop()
+                else:
+                    # Open and close character do not do not correspond.
+                    return False
+            except IndexError:
+                # There are no more open characters.
+                return False
+
+    return stack.is_empty()
+
+
 if __name__ == "__main__":
     s = Stack()
+    print(balanced_parentheses('(())'))
