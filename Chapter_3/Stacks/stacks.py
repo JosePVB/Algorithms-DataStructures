@@ -2,6 +2,7 @@
 """
 Module implements a simple stack data structure.
 """
+import operator
 
 
 class Stack():
@@ -129,7 +130,125 @@ def base_converter(base_ten_int, base=2):
     return ''.join(digits[stack.pop()] for _ in range(stack.size()))
 
 
+def infix_to_postfix(infix_expression):
+    """
+    Returns the postfix version of the expression.
+
+    Infix expressions have the operator in between the operands, while postfix
+    expressions have the operators after the operands, reading left to right.
+
+    Example (IMS - Intermediate Step):
+
+    Infix:      ( A + B ) * ( C - E ) ^ D - F
+        IMS 1:  ( A B + ) * ( C E - ) ^ D - F
+        IMS 2:  ( A B + ) * ( C E - D ^ ) - F
+        IMS 3:  ( A B + C E - D ^ * ) - F
+    Postfix:    A B + C E - D ^ * F -
+
+    Variables
+    ---------
+    infix_expression, string
+        Space delimited infix expression composed of multiplication (*),
+        division (/), addition (+), subtraction (-), exponential (^ or **),
+        and/or parentheses characters.
+    """
+    # Set up
+    operator_stack = Stack()  # Will keep track of operators in the expression.
+    postfix = []  # Will contain the postfix expression.
+
+    # Define operator precedence.
+    operator_precedence = {
+        "(": 0,  # Given the lowest precedence such that any other operator
+                 # will go above it.
+        ")": 0,
+        "^": 3,
+        "**": 3,
+        "*": 2,
+        "/": 2,
+        "+": 1,
+        "-": 1
+    }
+
+    # Loop over the expression.
+    for char in infix_expression.upper().split():
+        if char in operator_precedence:
+            if char == "(":
+                operator_stack.push(char)
+            elif char == ")":
+                # Append all operators to the postfix expression up until the
+                # corresponding open parenthesis.
+                while (not operator_stack.is_empty()
+                        and operator_stack.peek() != "("):
+                        postfix.append(operator_stack.pop())
+                if not operator_stack.is_empty():
+                    operator_stack.pop()  # Remove open parenthesis.
+            else:
+                char_precedence = operator_precedence[char]
+                # Append any operators of greater or equal precendence already
+                # on the Stack to the postfix expression; add operator to the
+                # Stack.
+                while (not operator_stack.is_empty()
+                        and (char_precedence
+                             <= operator_precedence[operator_stack.peek()])):
+                        postfix.append(operator_stack.pop())
+                operator_stack.push(char)
+        else:
+            postfix.append(char)
+
+    # Finished looping over the expression; append any remaining operators on
+    # the stack to the postfix list.
+    while not operator_stack.is_empty():
+        postfix.append(operator_stack.pop())
+    return " ".join(postfix)
+
+
+def compute_postfix(postfix_expression):
+    """
+    Returns the computed postfix expression.
+
+    Variables
+    ---------
+    postfix_expression, str
+        Space delimited postfix expression containing integers and
+        exponential (^ or **), multiplication (*), division (/), addition (+),
+        and/or subtraction (-) symbols.
+    """
+    # Setup
+    operand_stack = Stack()
+    operations = {
+        "^": operator.__pow__,
+        "**": operator.__pow__,
+        "*": operator.__mul__,
+        "/": operator.__truediv__,
+        "+": operator.__add__,
+        "-": operator.__sub__
+    }
+
+    # Loop over the expression.
+    for char in postfix_expression.split():
+        try:
+            operand_stack.push(int(char))
+        except ValueError:
+            # char is an operator; compute the operation using the two most
+            # recent entries in the operand_stack.
+            try:
+                second_operand, first_operand = (
+                    operand_stack.pop() for _ in range(2)
+                )
+            except IndexError:
+                raise ValueError("Need two operands before the "
+                                 "'{}' operator.".format(char))
+            # Add computation back unto the operand_stack for further
+            # computations.
+            operand_stack.push(operations[char](first_operand, second_operand))
+
+    # Remaining entry in the operand_stack is the final result.
+    return operand_stack.pop()
+
+
 if __name__ == "__main__":
     s = Stack()
     print(balanced_parentheses('(())'))
     print(base_converter(233453))
+    print(infix_to_postfix("( 15 + 6 ) * ( C - E ) ^ D - F"))
+    print(compute_postfix("7 8 + 8 2 + /"))
