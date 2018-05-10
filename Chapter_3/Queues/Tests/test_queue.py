@@ -2,12 +2,8 @@
 """
 Test case for the Queue class.
 """
-import os
-import sys
 import unittest
 
-# Add the /Queues directory containing queues.py
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from queues import Queue
 
@@ -35,4 +31,5 @@ class QueueTestCase(unittest.TestCase):
         self.assertNotIn(object, self.queue.items)
 
 
-unittest.main()
+if __name__ == "__main__":
+    unittest.main()
