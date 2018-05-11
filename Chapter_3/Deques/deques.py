@@ -50,7 +50,7 @@ class Deque():
                 self.append_right(item)
         except TypeError:
             # other is not iterable
-            self.append_right(other)
+            raise
         return Deque(items=self.items)
 
     def __radd__(self, other):
@@ -60,7 +60,7 @@ class Deque():
                 self.append_left(item)
         except TypeError:
             # other is not iterable
-            self.append_left(other)
+            raise
         return Deque(items=self.items)
 
     def __repr__(self):

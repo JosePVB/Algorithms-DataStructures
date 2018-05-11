@@ -70,6 +70,10 @@ class TestDeque(unittest.TestCase):
             deques.Deque(self.items[::-1] + self.additional_items)
         )
 
+        # Test exception when item is not an iterable.
+        with self.assertRaises(TypeError):
+            self.left_appended_deque + True
+
     def test_deque_addition_to_left(self):
         """
         Tests the result of iterable + Deque
@@ -80,6 +84,10 @@ class TestDeque(unittest.TestCase):
             self.additional_items + self.left_appended_deque,
             deques.Deque(self.additional_items + self.items[::-1])
         )
+
+        # Test exception when item is not an iterable.
+        with self.assertRaises(TypeError):
+            3 + self.right_appended_deque
 
     def test_deque__mul__(self):
         """
