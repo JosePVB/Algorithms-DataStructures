@@ -18,7 +18,16 @@ def palchecker(string):
     # Remove whitespace characters.
     deque = deques.Deque(re.sub(r'\s', '', string))
 
-    while deque.pop_left() == deque.pop_right() and len(deque) > 1:
-        continue
+    # Flag to identify if characters match.
+    chars_match = True
 
-    return 0 <= len(deque) <= 1
+    # Consume the elements in the Deque at both ends until the length
+    # of the Deque is less than or equal to one.
+    while chars_match and len(deque) > 1:
+        left_char = deque.pop_left()
+        right_char = deque.pop_right()
+
+        if left_char != right_char:
+            chars_match = False
+
+    return chars_match

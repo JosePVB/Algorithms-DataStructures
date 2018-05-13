@@ -16,10 +16,14 @@ class TestPalChecker(unittest.TestCase):
         self.assertEqual(TestPalChecker.palchecker("radar"), True)
 
     def test_not_a_palindrome(self):
-        self.assertEqual(TestPalChecker.palchecker("false"), False)
+        self.assertEqual(TestPalChecker.palchecker("tout"), False)
 
     def test_palindrome_with_spaces(self):
         self.assertEqual(TestPalChecker.palchecker("I PREFER PI"), True)
+
+    def test_short_palindrome(self):
+        self.assertEqual(TestPalChecker.palchecker('bob'), True)
+        self.assertEqual(TestPalChecker.palchecker('boy'), False)
 
 
 if __name__ == "__main__":
