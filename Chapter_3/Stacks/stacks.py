@@ -5,7 +5,7 @@ Module implements a simple stack data structure.
 import operator
 
 
-class Stack():
+class Stack:
     """
     The stack data type follows a Last In First Out (LIFO) ordering. This means
     that newer items are near the "top" of the stack, while older items are

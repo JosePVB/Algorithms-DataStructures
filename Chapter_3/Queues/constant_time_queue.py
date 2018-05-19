@@ -6,7 +6,7 @@ time dequeue methods.
 from Chapter_3.Stacks import stacks
 
 
-class Queue():
+class Queue:
     """
     Queue is implemented as two stacks, which allows for O(1) enqueue and
     amortized constant time dequeues.

@@ -21,7 +21,7 @@ import random
 from queues import Queue
 
 
-class Task():
+class Task:
     """
     Simulates a printing task.
     """
@@ -50,7 +50,7 @@ class Task():
         return current_time - self.created_at
 
 
-class Printer():
+class Printer:
     """Simulates a printer."""
     def __init__(self, pages_per_min):
         """

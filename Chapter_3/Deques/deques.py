@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 
-class Deque():
+class Deque:
     """
     Implementation of a deque (double-ended queue) abstract data type. Items
     can be added and removed from either side of the deque.

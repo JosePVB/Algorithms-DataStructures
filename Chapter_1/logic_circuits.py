@@ -8,7 +8,7 @@ Jose Vargas 4/28/2018
 """
 
 
-class LogicGate():
+class LogicGate:
     """
     Simulates input-output boolean algebra relationships, such as in
     digital circuits.
@@ -201,7 +201,7 @@ class NotGate(UnaryGate):
         return 0
 
 
-class Connector():
+class Connector:
     """
     Connects the output of one logic gate to the input of another gate.
 

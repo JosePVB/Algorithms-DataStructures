@@ -25,7 +25,7 @@ def gcd(m, n):
     return n
 
 
-class Fraction():
+class Fraction:
     """Class implements the abstract data type of Fraction."""
     def __init__(self, numerator, denominator):
         """Constructor.

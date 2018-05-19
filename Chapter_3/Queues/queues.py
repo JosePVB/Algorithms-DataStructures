@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 
-class Queue():
+class Queue:
     """
     A queue data structure based upon a Python list. Objects are added to the
     queue through the left and leave the queue through the right. Therefore
