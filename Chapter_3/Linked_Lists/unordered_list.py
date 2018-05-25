@@ -61,9 +61,9 @@ class UnorderedList:
         As an unordered list, the relative position of items is not important,
         therefore new nodes will be added to the beginning of the list.
 
-        Variables
+        Parameters
         ---------
-        item
+        item : object
             Object to store within the linked list.
         """
         # Create a new Node object.
@@ -92,9 +92,9 @@ class UnorderedList:
         """
         Returns True if the list contains the item.
 
-        Variables
+        Parameters
         ---------
-        item
+        item : object
             Object to search for in the list.
         """
         for node in self:
@@ -110,14 +110,14 @@ class UnorderedList:
 
     def __getitem__(self, position):
         """
-        Return the value at the provided position.
+        Return the item held by the Node at the provided position.
 
         If a slice is passed, a linked list is returned that contains
         the Nodes at these positions.
 
-        Variables
+        Parameters
         ---------
-        position, integer or slice
+        position : integer or slice
         """
         current_length = len(self)
 
@@ -126,6 +126,8 @@ class UnorderedList:
             # Raise error is position is greater than length of list.
             if current_length + position < 0 or position >= current_length:
                 raise IndexError("list index out of range")
+            # Modify position if negative.
+            position = current_length + position if position < 0 else position
             for num, node in enumerate(self):
                 if num == position:
                     return node.get_item()
@@ -185,15 +187,13 @@ class UnorderedList:
                 nodes = UnorderedList._repr_format(self, arrow)
             return format_string.format(nodes=nodes)
 
-
-
-
     def remove(self, item):
         """
         Removes the first instance of item from the linked list.
 
-        Variables
+        Parameters
         ---------
+        item : object
             Object to remove from the list.
         """
         previous_node = None
@@ -214,6 +214,108 @@ class UnorderedList:
                 previous_node.set_next_node(next(current_node.get_next_node))
         else:
             raise ValueError("{} not in list.".format(repr(item)))
+
+    def append(self, item):
+        """
+        Appends `item` to the end of the linked list.
+
+        Parameters
+        ----------
+        item : object
+            Object to add to the end of the unordered linked list.
+        """
+        if not self:
+            self.head = Node(item)
+        else:
+            # Loop until the last Node currently in the list.
+            last_index = len(self) - 1
+            for num, node in enumerate(self):
+                if num == last_index:
+                    node.set_next_node(Node(item))
+
+    def index(self, item):
+        """
+        Returns the index of the first ocurrance of `item` in the list.
+
+        Parameters
+        ----------
+        item : object
+            The object that will be searched for in the list.
+
+        Returns
+        -------
+        index : int
+            The position of `item` within the linked list.
+
+        Raises
+        ------
+        ValueError
+            If `item` is not within the list.
+        """
+        for index, node in enumerate(self):
+            if item == node.get_item():
+                return index
+        raise ValueError("{} is not in list".format(repr(item)))
+
+    def pop(self):
+        """
+        Removes the last Node in the linked list and returns its item.
+
+        Returns
+        -------
+        object
+            Item held within the last Node of the linked list.
+
+        Raises
+        ------
+        IndexError
+            If list is empty.
+        """
+        if self:
+           if len(self) == 1:
+                item = self.head.get_item()
+                self.head = None
+                return item
+           for num, node in enumerate(self):
+                if num == len(self) - 2:
+                    item = next(node).get_item()
+                    node.set_next_node(None)
+                    return item
+        raise IndexError("pop from empty list")
+
+    def insert(self, position, item):
+        """
+        Add the item at the given position.
+
+        `item` is added at the beginning or at the end of the list if
+        the magnitude of `position` is greater than the length of the list.
+
+        Parameters
+        ----------
+        position : int
+            Index at which to insert `item`
+        item : object
+            Object to insert into the linked list.
+        """
+        current_length = len(self)
+        position = (
+            current_length - 1
+            if position >= current_length > 1
+            else 1 if position >= current_length == 1
+            else 0 if position <= -current_length
+            else current_length + position if position < 0
+            else position
+        )
+        if not self or position == 0:
+            self.add(item)
+        else:
+            for num, node in enumerate(self):
+                if num == position - 1:
+                    new_node = Node(item)
+                    next_node = next(node)
+                    if next_node is not None:
+                        new_node.set_next_node(next_node)
+                    node.set_next_node(new_node)
 
 
 if __name__ == "__main__":
