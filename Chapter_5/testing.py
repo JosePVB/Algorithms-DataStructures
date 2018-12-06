@@ -8,7 +8,7 @@ import os
 # search 
 sys.path.append(os.path.dirname(os.path.realpath(__file__)))
 
-from search import sequential_search, binary_search
+from search import sequential_search, binary_search, Map
 
 
 class TestSearchAlgorithms(unittest.TestCase):
@@ -59,6 +59,99 @@ class TestSearchAlgorithms(unittest.TestCase):
         self.assertFalse(
             binary_search(self.value_not_present, self.values)
         )
+
+
+class TestMapADT(unittest.TestCase):
+
+    def setUp(self):
+        self.map = Map()
+        self.slots = [None for _ in range(self.map.size)]
+        self.data = [None for _ in range(self.map.size)]
+    
+    def test_hashfunction(self):
+        key = 21
+        hash_value = key % self.map.size
+        self.assertEqual(self.map.hashfunction(key), hash_value)
+    
+    def test_rehash(self):
+        key = 5
+        hash_value = (key + 1) % self.map.size
+        self.assertEqual(self.map.rehash(key), hash_value)
+    
+    def test_put_slots(self):
+        """
+        Tests that the key is stored at the expected index.
+        """
+        key, value = 54, "cat"
+        self.slots[self.map.hashfunction(54)] = key
+        self.map.put(key, value)
+        self.assertEqual(self.map.slots, self.slots)
+    
+    def test_put_data(self):
+        """
+        Tests that the value is stored at the expected index.
+        """
+        key, value = 54, "cat"
+        self.data[self.map.hashfunction(54)] = value
+        self.map.put(key, value)
+        self.assertEqual(self.map.data, self.data)
+    
+    def test_setitem_slots(self):
+        """
+        Tests that the key is stored at the expected index when
+        __setitem__ is used.
+        """
+        key, value = 54, "cat"
+        self.slots[self.map.hashfunction(54)] = key
+        self.map[key] = value
+        self.assertEqual(self.map.slots, self.slots)
+
+    def test_setitem_data(self):
+        """
+        Tests that the value is stored at the expected index when
+        __setitem__ is used.
+        """
+        key, value = 54, "cat"
+        self.data[self.map.hashfunction(54)] = value
+        self.map[key] = value
+        self.assertEqual(self.map.data, self.data)
+    
+    def test_get_existing_value(self):
+        key, value = 20, "chicken"
+        self.map[key] = value
+        self.assertEqual(self.map.get(key), value)
+    
+    def test_getitem_existing_value(self):
+        key, value = 20, "chicken"
+        self.map[key] = value
+        self.assertEqual(self.map[key], value)
+    
+    def test_getitem_raises_keyerror_if_not_existing_value(self):
+        key, value = 20, "chicken"
+        self.map[key] = value
+        with self.assertRaises(KeyError):
+            self.map[key+1]
+    
+    def test_get_returns_default_if_not_existing_value(self):
+        key, value = 20, "chicken"
+        self.map[key] = value
+        # key + 1 is not in the hash table.
+        self.assertEqual(self.map.get(key+1), None)
+    
+    def test_get_returns_provided_default_if_not_existing_value(self):
+        key, value = 20, "chicken"
+        default = 'my_desired_default'
+        self.map[key] = value
+        self.assertEqual(self.map.get(key+1, default), default)
+    
+    def test_values_stored_in_hash_collision(self):
+        key, value = 20, "chicken"
+        collision_key, collision_value = (key - self.map.size), "dog"
+        self.map[key] = value
+        self.map[collision_key] = collision_value
+        self.assertEqual(self.map.get(key), value)
+        self.assertEqual(self.map.get(collision_key), collision_value)
+
 
 if __name__ == "__main__":
     unittest.main()
