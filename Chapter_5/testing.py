@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import unittest
+import random
 import sys
 import os
 
@@ -9,6 +10,7 @@ import os
 sys.path.append(os.path.dirname(os.path.realpath(__file__)))
 
 from search import sequential_search, binary_search, Map
+from sorting import bubble_sort
 
 
 class TestSearchAlgorithms(unittest.TestCase):
@@ -151,6 +153,45 @@ class TestMapADT(unittest.TestCase):
         self.map[collision_key] = collision_value
         self.assertEqual(self.map.get(key), value)
         self.assertEqual(self.map.get(collision_key), collision_value)
+
+class TestSortingAlgorithms(unittest.TestCase):
+
+    def setUp(self):
+        self.positive_list, self.ordered_positive_list = (
+            list(range(10)), list(range(10))
+        )
+        self.negative_list, self.ordered_negative_list = (
+            list(range(-53, 0, -1)), list(range(-53, 0, -1))
+        )
+        self.mixed_list, self.ordered_mixed_list = (
+            list(range(-42, 75)), list(range(-42, 75))
+        )
+
+        random.shuffle(self.positive_list)
+        random.shuffle(self.negative_list)
+        random.shuffle(self.mixed_list)
+    
+    def test_bubble_sort_positive_list(self):
+        """
+        Test the bubble sort algorithm for positive numbers.
+        """
+        self.positive_list = bubble_sort(self.positive_list)
+        self.assertEqual(self.positive_list, self.ordered_positive_list)
+    
+    def test_bubble_sort_negative_list(self):
+        """
+        Test the bubble sort algorithm for negative numbers.
+        """
+        self.negative_list = bubble_sort(self.negative_list)
+        self.assertEqual(self.negative_list, self.ordered_negative_list)
+    
+    def test_bubble_sort_mixed_list(self):
+        """
+        Test the bubble sort algorithm for mixed numbers, both postive and
+        negative.
+        """
+        self.mixed_list = bubble_sort(self.mixed_list)
+        self.assertEqual(self.mixed_list, self.ordered_mixed_list)
 
 
 if __name__ == "__main__":
