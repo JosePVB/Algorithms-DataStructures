@@ -192,6 +192,12 @@ class TestSortingAlgorithms(unittest.TestCase):
         """
         self.mixed_list = bubble_sort(self.mixed_list)
         self.assertEqual(self.mixed_list, self.ordered_mixed_list)
+    
+    def test_bubble_sort_empty_list(self):
+        """
+        Test that no error is raised if trying to sort an empty list.
+        """
+        self.assertEqual([], bubble_sort([]))
 
 
 if __name__ == "__main__":
