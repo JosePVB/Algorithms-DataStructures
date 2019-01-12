@@ -36,3 +36,28 @@ def bubble_sort(values):
 
         iteration -= 1
     return values
+
+def selection_sort(values):
+    """
+    Implementation of the selection sort algorithm.
+
+    Parameters
+    ----------
+    values : list
+
+    Returns
+    -------
+    Sorted list
+    """
+    iterations = len(values) - 1
+    # Make n - 1 passes through the list.
+    for iteration in range(iterations, 0, -1):
+        index_of_max = iteration
+        for i in range(iteration):
+            if values[i] > values[index_of_max]:
+                index_of_max = i
+        values[iteration], values[index_of_max] = (
+            values[index_of_max], values[iteration]
+        )
+    return values
+    
