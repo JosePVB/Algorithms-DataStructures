@@ -10,10 +10,10 @@ import os
 sys.path.append(os.path.dirname(os.path.realpath(__file__)))
 
 from search import sequential_search, binary_search, Map
-from sorting import bubble_sort
+from sorting import bubble_sort, selection_sort
 
 
-class TestSearchAlgorithms(unittest.TestCase):
+class TestSearchAlgorithmMixin:
 
     @classmethod
     def setUpClass(cls):
@@ -30,37 +30,63 @@ class TestSearchAlgorithms(unittest.TestCase):
         # Value for which the algorithms should return False.
         self.value_not_present = -6000
   
-    def test_sequential_search_first_item(self):
-        self.assertTrue(sequential_search(self.first, self.values))
+    def test_first_item(self):
+        self.assertTrue(self.algorithm(self.first, self.values))
     
-    def test_sequential_search_last_item(self):
-        self.assertTrue(sequential_search(self.last, self.values))
+    def test_last_item(self):
+        self.assertTrue(self.algorithm(self.last, self.values))
     
-    def test_sequential_search_value_present(self):
-        self.assertTrue(
-            sequential_search(self.value_present, self.values)
+    def test_value_present(self):
+        self.assertTrue(self.algorithm(self.value_present, self.values))
+    
+    def test_value_not_present(self):
+        self.assertFalse(self.algorithm(self.value_not_present, self.values))
+
+
+class TestSortingAlgorithmMixin:
+
+    def setUp(self):
+        self.positive_list, self.ordered_positive_list = (
+            list(range(10)), list(range(10))
         )
-    
-    def test_sequential_search_value_not_present(self):
-        self.assertFalse(
-            sequential_search(self.value_not_present, self.values)
+        self.negative_list, self.ordered_negative_list = (
+            list(range(-53, 0, -1)), list(range(-53, 0, -1))
         )
-    
-    def test_binary_search_first_item(self):
-        self.assertTrue(binary_search(self.first, self.values))
-    
-    def test_binary_search_last_item(self):
-        self.assertTrue(binary_search(self.last, self.values))
-    
-    def test_binary_search_value_present(self):
-        self.assertTrue(
-            binary_search(self.value_present, self.values)
+        self.mixed_list, self.ordered_mixed_list = (
+            list(range(-42, 75)), list(range(-42, 75))
         )
+
+        random.shuffle(self.positive_list)
+        random.shuffle(self.negative_list)
+        random.shuffle(self.mixed_list)
     
-    def test_binary_search_value_not_present(self):
-        self.assertFalse(
-            binary_search(self.value_not_present, self.values)
-        )
+    def test_positive_list(self):
+        """
+        Test the algorithm for positive numbers.
+        """
+        self.positive_list = self.algorithm(self.positive_list)
+        self.assertEqual(self.positive_list, self.ordered_positive_list)
+    
+    def test_negative_list(self):
+        """
+        Test the algorithm for negative numbers.
+        """
+        self.negative_list = self.algorithm(self.negative_list)
+        self.assertEqual(self.negative_list, self.ordered_negative_list)
+    
+    def test_mixed_list(self):
+        """
+        Test the algorithm for mixed list of numbers, both postive and
+        negative.
+        """
+        self.mixed_list = self.algorithm(self.mixed_list)
+        self.assertEqual(self.mixed_list, self.ordered_mixed_list)
+    
+    def test_empty_list(self):
+        """
+        Test that no error is raised if trying to sort an empty list.
+        """
+        self.assertEqual([], self.algorithm([]))
 
 
 class TestMapADT(unittest.TestCase):
@@ -154,50 +180,33 @@ class TestMapADT(unittest.TestCase):
         self.assertEqual(self.map.get(key), value)
         self.assertEqual(self.map.get(collision_key), collision_value)
 
-class TestSortingAlgorithms(unittest.TestCase):
 
-    def setUp(self):
-        self.positive_list, self.ordered_positive_list = (
-            list(range(10)), list(range(10))
-        )
-        self.negative_list, self.ordered_negative_list = (
-            list(range(-53, 0, -1)), list(range(-53, 0, -1))
-        )
-        self.mixed_list, self.ordered_mixed_list = (
-            list(range(-42, 75)), list(range(-42, 75))
-        )
+class TestSequentialSearch(TestSearchAlgorithmMixin, unittest.TestCase):
+    
+    @staticmethod
+    def algorithm(*args, **kwargs):
+        return sequential_search(*args, **kwargs)
 
-        random.shuffle(self.positive_list)
-        random.shuffle(self.negative_list)
-        random.shuffle(self.mixed_list)
+
+class TestBinarySeach(TestSearchAlgorithmMixin, unittest.TestCase):
     
-    def test_bubble_sort_positive_list(self):
-        """
-        Test the bubble sort algorithm for positive numbers.
-        """
-        self.positive_list = bubble_sort(self.positive_list)
-        self.assertEqual(self.positive_list, self.ordered_positive_list)
+    @staticmethod
+    def algorithm(*args, **kwargs):
+        return binary_search(*args, **kwargs)
+
+
+class TestBubbleSort(TestSortingAlgorithmMixin, unittest.TestCase):
     
-    def test_bubble_sort_negative_list(self):
-        """
-        Test the bubble sort algorithm for negative numbers.
-        """
-        self.negative_list = bubble_sort(self.negative_list)
-        self.assertEqual(self.negative_list, self.ordered_negative_list)
-    
-    def test_bubble_sort_mixed_list(self):
-        """
-        Test the bubble sort algorithm for mixed numbers, both postive and
-        negative.
-        """
-        self.mixed_list = bubble_sort(self.mixed_list)
-        self.assertEqual(self.mixed_list, self.ordered_mixed_list)
-    
-    def test_bubble_sort_empty_list(self):
-        """
-        Test that no error is raised if trying to sort an empty list.
-        """
-        self.assertEqual([], bubble_sort([]))
+    @staticmethod
+    def algorithm(*args, **kwargs):
+        return bubble_sort(*args, **kwargs)
+
+
+class TestSelectionSort(TestSortingAlgorithmMixin, unittest.TestCase):
+
+    @staticmethod
+    def algorithm(*args, **kwargs):
+        return selection_sort(*args, **kwargs)
 
 
 if __name__ == "__main__":
