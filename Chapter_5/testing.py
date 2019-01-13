@@ -10,7 +10,7 @@ import os
 sys.path.append(os.path.dirname(os.path.realpath(__file__)))
 
 from search import sequential_search, binary_search, Map
-from sorting import bubble_sort, selection_sort, insertion_sort, shell_sort
+from sorting import bubble_sort, selection_sort, insertion_sort, shell_sort, merge_sort
 
 
 class TestSearchAlgorithmMixin:
@@ -240,6 +240,12 @@ class TestShellSort(TestSortingAlgorithmMixin, unittest.TestCase):
     @staticmethod
     def algorithm(*args, **kwargs):
         return shell_sort(*args, **kwargs)
+    
+class TestMergeSort(TestSortingAlgorithmMixin, unittest.TestCase):
+
+    @staticmethod
+    def algorithm(*args, **kwargs):
+        return merge_sort(*args, **kwargs)
 
 
 

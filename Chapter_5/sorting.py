@@ -127,6 +127,75 @@ def shell_sort(values):
         number_of_sublists //= 2
 
     return values
+
+def merge_sort(values, **kwargs):
+    """
+    Implementation of the merge sort algorithm.
+
+    Parameters
+    ----------
+    values : list
+        Values to sort
+    
+    Returns
+    -------
+    A sorted list
+    """
+    start_index = kwargs.get('_start_index', 0)
+    end_index = kwargs.get('_end_index', len(values))
+    number_of_values = end_index - start_index
+    result = [0] * number_of_values
+    if number_of_values <= 1:
+        if result:
+            result[0] = values[start_index]
+        return result
+    
+    middle = number_of_values // 2 + start_index
+    left_list = merge_sort(values, _start_index=start_index, _end_index=middle)
+    right_list = merge_sort(
+        values,
+        _start_index=middle,
+        _end_index=end_index
+    )
+    # Merge the sorted items.
+    length_of_left_list = len(left_list)
+    length_of_right_list = len(right_list)
+    left_index = 0  # Current position in the `left_list`.
+    right_index = 0  # Current position in the `right_list`.
+    result_index = 0  # Current position in the `result` list.
+
+    # Compare the elements in the left list to the right list. Pick the
+    # smallest value and add it to the `result` list.
+    while (
+            left_index < length_of_left_list
+            and right_index < length_of_right_list):
+        left_value = left_list[left_index]
+        right_value = right_list[right_index]
+        if left_value < right_value:
+            result[result_index] = left_value
+            left_index += 1
+        else:
+            result[result_index] = right_value
+            right_index += 1
+        result_index += 1
+    
+    # Add the remaining elements in the left list. Elements within a list
+    # are sorted.
+    while left_index < length_of_left_list:
+        result[result_index] = left_list[left_index]
+        left_index += 1
+        result_index += 1
+    
+    # Add the remaining elements in the right list. Elements within a list
+    # are sorted.
+    while right_index < length_of_right_list:
+        result[result_index] = right_list[right_index]
+        right_index += 1
+        result_index += 1
+    
+    return result
+
+
         
     
     
