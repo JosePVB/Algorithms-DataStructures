@@ -60,4 +60,36 @@ def selection_sort(values):
             values[index_of_max], values[iteration]
         )
     return values
+
+def insertion_sort(values):
+    """
+    Implementation of the insertion sort algorithm.
+
+    Parameters
+    ----------
+    values : list
+
+    Returns
+    -------
+    Sorted list
+    """
+    if not values:
+        return values
+    # Need to loop over the list
+    for i in range(1, len(values)):
+        current_value = values[i]
+        # Need variable to track position at index of sublist.
+        position = i
+
+        # Sequentially search sublist for the index at which the
+        # `current_value should be inserted. If the current value in the
+        # sublist is greater than `current_value`, increase the index of the
+        # value in the sublist.
+        while position > 0 and values[position-1] > current_value:
+            values[position]  = values[position-1]
+            position -= 1
+        values[position] = current_value
+    return values
+        
+    
     

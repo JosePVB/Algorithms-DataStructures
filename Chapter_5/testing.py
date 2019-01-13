@@ -10,7 +10,7 @@ import os
 sys.path.append(os.path.dirname(os.path.realpath(__file__)))
 
 from search import sequential_search, binary_search, Map
-from sorting import bubble_sort, selection_sort
+from sorting import bubble_sort, selection_sort, insertion_sort
 
 
 class TestSearchAlgorithmMixin:
@@ -207,6 +207,13 @@ class TestSelectionSort(TestSortingAlgorithmMixin, unittest.TestCase):
     @staticmethod
     def algorithm(*args, **kwargs):
         return selection_sort(*args, **kwargs)
+
+
+class TestInsertionSort(TestSortingAlgorithmMixin, unittest.TestCase):
+
+    @staticmethod
+    def algorithm(*args, **kwargs):
+        return insertion_sort(*args, **kwargs)
 
 
 if __name__ == "__main__":
