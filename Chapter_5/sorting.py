@@ -61,13 +61,19 @@ def selection_sort(values):
         )
     return values
 
-def insertion_sort(values):
+def insertion_sort(values, starting_index=0, gap=1):
     """
     Implementation of the insertion sort algorithm.
 
     Parameters
     ----------
     values : list
+        Values to sort
+    starting_index : int, default = 0
+        The index at which to begin sorting.
+    gap : int, default = 1
+        Sort items that are this number apart. By default, sorts all contiguous
+        items (the entire list).
 
     Returns
     -------
@@ -75,8 +81,11 @@ def insertion_sort(values):
     """
     if not values:
         return values
-    # Need to loop over the list
-    for i in range(1, len(values)):
+    if starting_index < 0:
+        raise IndexError('`starting_index` must be a positive index')
+    # Need to loop over the list. Assume that the value at the starting index
+    # is already in order.
+    for i in range(starting_index+gap, len(values), gap):
         current_value = values[i]
         # Need variable to track position at index of sublist.
         position = i
@@ -85,10 +94,27 @@ def insertion_sort(values):
         # `current_value should be inserted. If the current value in the
         # sublist is greater than `current_value`, increase the index of the
         # value in the sublist.
-        while position > 0 and values[position-1] > current_value:
-            values[position]  = values[position-1]
-            position -= 1
+        while position > 0 and values[position-gap] > current_value:
+            values[position]  = values[position-gap]
+            position -= gap
         values[position] = current_value
+    return values
+
+def shell_sort(values):
+
+    # Sort `gap` sublists.
+    number_of_sublists = len(values) // 2
+    while number_of_sublists > 0:
+
+        for i in range(number_of_sublists):
+            values = insertion_sort(
+                values,
+                starting_index=i,
+                gap=number_of_sublists
+            )
+        
+        number_of_sublists //= 2
+
     return values
         
     

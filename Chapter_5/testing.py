@@ -10,7 +10,7 @@ import os
 sys.path.append(os.path.dirname(os.path.realpath(__file__)))
 
 from search import sequential_search, binary_search, Map
-from sorting import bubble_sort, selection_sort, insertion_sort
+from sorting import bubble_sort, selection_sort, insertion_sort, shell_sort
 
 
 class TestSearchAlgorithmMixin:
@@ -214,6 +214,33 @@ class TestInsertionSort(TestSortingAlgorithmMixin, unittest.TestCase):
     @staticmethod
     def algorithm(*args, **kwargs):
         return insertion_sort(*args, **kwargs)
+    
+    def setUp(self):
+        super().setUp()
+        self.list = [54, 26, 93, 17, 77, 31, 44, 55, 20]
+    
+    def test_insertion_sort_with_gap(self):
+        gap = 3
+        self.list = self.algorithm(self.list, gap=gap)
+        self.assertEqual([17, 26, 93, 44, 77, 31, 54, 55, 20], self.list)
+    
+    def test_insertion_sort_with_gap_and_non_zero_starting_index(self):
+        gap = 3
+        starting_index = 1
+        self.list = self.algorithm(
+            self.list,
+            starting_index=starting_index,
+            gap=gap
+        )
+        self.assertEqual([54, 26, 93, 17, 55, 31, 44, 77, 20], self.list)
+
+
+class TestShellSort(TestSortingAlgorithmMixin, unittest.TestCase):
+    
+    @staticmethod
+    def algorithm(*args, **kwargs):
+        return shell_sort(*args, **kwargs)
+
 
 
 if __name__ == "__main__":
