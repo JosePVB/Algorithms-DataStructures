@@ -101,6 +101,17 @@ def insertion_sort(values, starting_index=0, gap=1):
     return values
 
 def shell_sort(values):
+    """
+    Implementation of the selection sort algorithm.
+
+    Parameters
+    ----------
+    values : list
+
+    Returns
+    -------
+    Sorted list
+    """
 
     # Sort `gap` sublists.
     number_of_sublists = len(values) // 2
